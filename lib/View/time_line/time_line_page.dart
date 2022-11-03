@@ -91,14 +91,6 @@ class _TimeLinePageState extends State<TimeLinePage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => PostPage()
-          ));
-        },
-        child: Icon(Icons.chat_bubble_outline),
-      ),
     );
   }
 }
