@@ -10,8 +10,23 @@ class Authentication {
       print('登録完了');
       return true;
     } on FirebaseAuthException catch(e){
-      return '登録エラーが発生しました';
+      print('登録エラーが発生しました');
+      return false;
     }
   }
 
+  static Future<dynamic> emailSignIn({required String email, required String pass}) async {
+    try {
+      final UserCredential _result = await _firebaseAuth.signInWithEmailAndPassword(
+          email:    email,
+          password: pass
+      );
+      currentFirebaseUser = _result.user;
+      print('signIn sucsess');
+      return true;
+    } on FirebaseAuthException catch(e){
+      print('signIn error: $e');
+      return false;
+    }
+  }
 }
