@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sns/utils/authentication.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,6 +30,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
         image = File(pickedFile.path);
       });
     }
+  }
+
+  Future<void> uploadImage(String uid) async{
+    final FirebaseStorage storageInstanse = FirebaseStorage.instance;
+    final Reference ref                   = storageInstanse.ref();
+    await ref.child(uid).putFile(image!);
+
+    String downloadUrl = await storageInstanse.ref(uid).getDownloadURL();
+    print(downloadUrl);
   }
 
   @override
@@ -107,7 +118,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       && image != null
                     ){
                       var result = await Authentication.signUp(email: emailController.text, pass: passController.text);
-                      if(result == true){
+
+                      if(result is UserCredential){
+                        await uploadImage(result.user!.uid);
                         Navigator.pop(context);
                       }
                     }
