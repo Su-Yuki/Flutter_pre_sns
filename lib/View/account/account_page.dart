@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sns/utils/authentication.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/account.dart';
@@ -13,15 +14,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  Account myAccount = Account(
-    id:               '1',
-    name:             'TestAccount',
-    selfIntroduction: 'hello this is test comment',
-    userId:           'test_account',
-    imagePath:        'https://picsum.photos/200',
-    createdTime:      Timestamp.now(),
-    updatedTime:      Timestamp.now(),
-  );
+  Account myAccount = Authentication.myAccount!;
 
   List<Post> postList = [
     Post(
