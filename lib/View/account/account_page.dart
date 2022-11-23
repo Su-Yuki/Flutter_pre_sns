@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sns/View/account/edit_account_page.dart';
+import 'package:flutter_sns/utils/authentication.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/account.dart';
@@ -12,15 +15,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  Account myAccount = Account(
-    id:               '1',
-    name:             'TestAccount',
-    selfIntroduction: 'hello this is test comment',
-    userId:           'test_account',
-    imagePath:        'https://picsum.photos/200',
-    createdTime:      DateTime.now(),
-    updatedTime:      DateTime.now(),
-  );
+  Account myAccount = Authentication.myAccount!;
 
   List<Post> postList = [
     Post(
@@ -66,13 +61,20 @@ class _AccountPageState extends State<AccountPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(myAccount.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                                  Text('@${myAccount}', style: TextStyle(color: Colors.grey),),
+                                  Text('@${myAccount.userId}', style: TextStyle(color: Colors.grey),),
                                 ],
                               )
                             ],
                           ),
                           OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () async{
+                                var result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditAccountPage()));
+                                if(result == true){
+                                  setState(() {
+                                    myAccount = Authentication.myAccount!;
+                                  });
+                                }
+                              },
                               child: Text('編集'),
                           )
                         ],
