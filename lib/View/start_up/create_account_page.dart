@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sns/model/account.dart';
 import 'package:flutter_sns/utils/authentication.dart';
 import 'package:flutter_sns/utils/firestore/users.dart';
+import 'package:flutter_sns/utils/function_utils.dart';
 import 'package:flutter_sns/utils/widget_utils.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,26 +25,6 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   TextEditingController emailController            = TextEditingController();
 
   File? image;
-  ImagePicker picker = ImagePicker();
-
-  Future<void> getImageFromGallery() async{
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if(pickedFile != null){
-      setState(() {
-        image = File(pickedFile.path);
-      });
-    }
-  }
-
-  Future<String> uploadImage(String uid) async{
-    final FirebaseStorage storageInstanse = FirebaseStorage.instance;
-    final Reference ref                   = storageInstanse.ref();
-    await ref.child(uid).putFile(image!);
-
-    String downloadUrl = await storageInstanse.ref(uid).getDownloadURL();
-    print(downloadUrl);
-    return downloadUrl;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +37,13 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             children: [
               SizedBox(height: 30,),
               GestureDetector(
-                onTap: () {
-                  getImageFromGallery();
+                onTap: () async{
+                  var result = await FunctionUtils.getImageFromGallery();
+                  if(result != null){
+                    setState(() {
+                      image = File(result.path);
+                    });
+                  }
                 },
                 child: CircleAvatar(
                   foregroundImage: image == null ? null : FileImage(image!),
@@ -119,7 +105,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       var result = await Authentication.signUp(email: emailController.text, pass: passController.text);
 
                       if(result is UserCredential){
-                        String imagePath = await uploadImage(result.user!.uid);
+                        String imagePath = await FunctionUtils.uploadImage(result.user!.uid, image!);
                         Account newAccount = Account(
                           id: result.user!.uid,
                           name:             nameController.text,
