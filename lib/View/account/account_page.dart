@@ -60,7 +60,7 @@ class _AccountPageState extends State<AccountPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(myAccount.name, style: TextStyle(fontWeight: FontWeight.bold),),
-                                  Text('@${myAccount}', style: TextStyle(color: Colors.grey),),
+                                  Text('@${myAccount.selfIntroduction}', style: TextStyle(color: Colors.grey),),
                                 ],
                               )
                             ],

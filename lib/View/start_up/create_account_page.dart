@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sns/model/account.dart';
 import 'package:flutter_sns/utils/authentication.dart';
 import 'package:flutter_sns/utils/firestore/users.dart';
+import 'package:flutter_sns/utils/widget_utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -47,12 +48,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: Text('新規登録', style: TextStyle(color: Colors.black),),
-      ),
+      appBar: WidgetUtils.createAppBar('新規登録'),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
