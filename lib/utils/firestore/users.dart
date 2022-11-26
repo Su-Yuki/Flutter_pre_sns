@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_sns/model/account.dart';
 import 'package:flutter_sns/utils/authentication.dart';
+import 'package:flutter_sns/utils/firestore/posts.dart';
 
 class UserFirestore {
   static final _firestoreInstance = FirebaseFirestore.instance;
@@ -86,5 +87,10 @@ class UserFirestore {
     } on FirebaseException catch(e){
       return null;
     }
+  }
+
+  static Future<dynamic> deleteUser(String accountId) async{
+    users.doc(accountId).delete();
+    PostFirestore.deletePosts(accountId);
   }
 }
