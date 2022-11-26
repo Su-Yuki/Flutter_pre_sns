@@ -45,6 +45,17 @@ class PostFirestore {
       print('投稿取得失敗');
       return null;
     }
+  }
 
+  static Future<dynamic> deletePosts(String accountId) async{
+    final CollectionReference _userPosts = _firestoreInstance
+        .collection('users')
+        .doc(accountId)
+        .collection('my_posts');
+    var snapshot = await _userPosts.get();
+    snapshot.docs.forEach((doc) async{
+      await posts.doc(doc.id).delete();
+      _userPosts.doc(doc.id).delete();
+    });
   }
 }
